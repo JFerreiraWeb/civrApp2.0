@@ -1,13 +1,7 @@
 <ion-view view-title="Lista de Alojamento">
 <ion-content>
-
-  <ion-refresher
-    pulling-text="Pull to refresh..."
-    on-refresh="loadNewLodgings()">
-  </ion-refresher>
-
       <div class="list">
-      <a class="item item-thumbnail-left item-icon-right" ng-href="tel:{{lodging.custom_fields.client_name}}" ng-repeat="lodging in lodgings">
+      <a class="item item-thumbnail-left item-icon-right" ng-href="tel:{{lodging.custom_fields.client_name}}" ng-repeat="lodging in lodgings track by lodging.id">
         
         
         

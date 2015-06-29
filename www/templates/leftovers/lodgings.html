@@ -90,3 +90,13 @@ app.controller('LoadMoreLodgingCtrl', function($scope, $http) {
     });
   };
 });
+
+
+ $scope.userPhoto = photo.user.id;
+          $http.get('https://api.instagram.com/v1/users/'+$scope.userPhoto+'/?access_token=1368360108.119d058.c88a3bdad63f4c6e923eb96b9db732df')
+          .sucess(function(responseUser){
+            $scope.photoUserReady = responseUser.user.profile_picture;
+
+
+
+          });

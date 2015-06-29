@@ -32,30 +32,7 @@ $scope.openLink = function(url){
     $scope.lodgings=[];
     $scope.pagesLoaded=0;
     $scope.noMoreItemsAvailable = false;
-
-    $scope.loadNewLodgings = function() {
-      
-      console.log('Actualizando!');
-      
-    $http.get('http://www.civr.pt/category/app-alojamento/?json=get_recent_posts'+$scope.page)
-     .success(function(newLodgings) {
-              
-
-
-      angular.forEach(newLodgings.posts, function(post) {
-        $scope.lodgings.push(post);
-
-      })
-
-      // Stop the ion-refresher from spinning
-       $scope.$broadcast('scroll.refreshComplete');
-      
-});
      
-       
-     
-  };
-
 
     $scope.loadMoreLodgings = function (){
 
@@ -66,14 +43,6 @@ $scope.openLink = function(url){
     }
     $http.get('http://www.civr.pt/category/app-alojamento/?json=get_recent_posts&page='+$scope.page)
     .success(function(response){
-
-      $scope.countLodgings = response.count_total;
-      $scope.countPosts = response.count;
-      
-      console.log($scope.page);
-      console.log($scope.countPosts);
-
-
       angular.forEach(response.posts, function(post) {
         $scope.lodgings.push(post);
 
@@ -87,12 +56,8 @@ $scope.openLink = function(url){
       $scope.$broadcast('scroll.infiniteScrollComplete');
       
 });
-
-
-
-
-    };
-  });
+  };
+});
 
 
   //definir controlador dos restaurantes
@@ -183,6 +148,49 @@ $scope.openLink = function(url){
   });
 
 
+    //definir controlador das news
+   app.controller('ContactsController', function($scope) {
+
+
+    $scope.googleMaps = 'http://www.google.pt/maps/place/Av.+Carvalho+Ara%C3%BAjo+7,+5000-651+Vila+Real/@41.2948537,-7.7463567,17z/data=!3m1!4b1!4m2!3m1!1s0xd3b4b06ba992451:0x1bf6f7bd29f595df?hl=en';
+    $scope.civrTwitter = 'http://twitter.com/CIVROFICIAL';
+    $scope.civrFacebook = 'http://www.facebook.com/Circuito.Internacional.de.Vila.Real.Oficial';
+    $scope.civrInstagram = 'http://instagram.com/circuitovilareal/';
+
+
+    $scope.openLink = function(url){
+
+    window.open(url,'_blank','location=yes');
+
+  };
+  });
+
+     //definir controlador do feed de instagram
+  app.controller('CivrInstagramController', function($http, $scope) {
+
+     $scope.photos = [];
+     $scope.userPhoto= 0;
+     $scope.photoUserReady = 0;
+
+      $http.get("https://api.instagram.com/v1/tags/circuitovilareal/media/recent?access_token=1368360108.119d058.c88a3bdad63f4c6e923eb96b9db732df")
+      .success(function(response) {
+
+        angular.forEach(response.data, function(photo){
+          $scope.photos.push(photo);
+         
+
+
+
+
+
+        });
+      });
+});
+
+   
+
+
+
 
 //passar o nosso config que utiliza stateprovider e urlrouterprovider utilizados para nav
   app.config(function($stateProvider, $urlRouterProvider){
@@ -207,6 +215,49 @@ $scope.openLink = function(url){
         'tab-home': {
           templateUrl:'templates/maps.html',
           controller:'MapController'
+        }
+
+      }
+      
+    });
+
+    //definir state para o home.instacivrfeed view
+    $stateProvider.state('instacivrfeed', {
+
+      url: '/instacivrfeed',
+      views: {
+        //queremos mm esta nav
+        'tab-home': {
+          templateUrl:'templates/instacivrfeed.html',
+          controller:'CivrInstagramController'
+        }
+
+      }
+      
+    });
+
+    //definir state para o home.schedule view
+    $stateProvider.state('schedule', {
+
+      url: '/schedule',
+      views: {
+        //queremos mm esta nav
+        'tab-home': {
+          templateUrl:'templates/schedule.html'
+        }
+
+      }
+      
+    });
+
+     //definir state para o home.schedule view
+    $stateProvider.state('access', {
+
+      url: '/access',
+      views: {
+        //queremos mm esta nav
+        'tab-home': {
+          templateUrl:'templates/access.html'
         }
 
       }
@@ -270,6 +321,22 @@ $scope.openLink = function(url){
       }
       
     });
+
+  //definir state para o info.apcivr view
+      $stateProvider.state('apcivr', {
+
+      url: '/apcivr',
+      views: {
+        //queremos mm esta nav
+        'tab-info': {
+          templateUrl:'templates/apcivr.html',
+          controller:'ContactsController'
+        
+        }
+
+      }
+      
+    });     
 
 //definir state para o results view
     $stateProvider.state('results', {
